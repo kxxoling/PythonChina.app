@@ -1,0 +1,3 @@
+rootProject.name = 'PythonChina'
+
+include ':app'
