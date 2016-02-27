@@ -55,7 +55,7 @@ var Timeline = createClass({
         <View style={styles.bottomContainer}>
           <Text style={styles.name}>{post.user.name || post.user.username}</Text>
           <Text style={styles.bottom}>{post.view_count} views</Text>
-          <Text style={styles.bottom}>{post.read_count} replies</Text>
+          <Text style={styles.bottom}>{post.comment_count} replies</Text>
           <Text style={styles.bottom}>{post.like_count} likes</Text>
           <Text style={styles.bottom}>{post.created_at}</Text>
         </View>
