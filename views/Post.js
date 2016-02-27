@@ -8,7 +8,7 @@ import React, {
   ListView,
 } from 'react-native';
 
-import { POST_URL, COMMENTS_URL, DEFAULT_AVATAR } from '../config'
+import { DEFAULT_AVATAR } from '../config'
 
 var Post = createClass({
   getInitialState () {
@@ -19,6 +19,7 @@ var Post = createClass({
       post: {},
       postGot: false,
       commentsGot: false,
+      postId: this.props.postId,
     }
   },
   render () {
@@ -91,7 +92,8 @@ var Post = createClass({
     )
   },
   fetchPost () {
-    fetch(POST_URL)
+    var url = `https://python-china.org/api/topics/${this.state.postId}`;
+    fetch(url)
       .then((rsp) => rsp.json())
       .then((rspData) => {
         this.setState({
@@ -102,7 +104,8 @@ var Post = createClass({
       .done();
   },
   fetchComments () {
-    fetch(COMMENTS_URL)
+    var url = `https://python-china.org/api/topics/${this.state.postId}/comments?order=asc`
+    fetch(url)
       .then((rsp) => rsp.json())
       .then((rspData) => {
         this.setState({
@@ -126,6 +129,7 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     margin: 8,
+    marginTop: 60,
   },
   container: {
     flex: 1,

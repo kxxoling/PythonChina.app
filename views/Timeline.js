@@ -6,10 +6,12 @@ import React, {
   Text,
   ListView,
   View,
+  TouchableHighlight,
   Image
 } from 'react-native';
 
 import { TIMELINE_URL, DEFAULT_AVATAR } from '../config'
+import Post from './Post'
 
 var Timeline = createClass({
   getInitialState () {
@@ -43,11 +45,14 @@ var Timeline = createClass({
   },
   renderPost (post) {
     return (
+      <TouchableHighlight onDelayColor='#dddddd'
+          onPress={() => this.jumpToPost(post.id)}>
       <View style={styles.mainContainer}>
         <View style={styles.container}>
-          <Image
-              source={post.user.avatar_url && {uri: 'https:'+post.user.avatar_url} || DEFAULT_AVATAR}
-              style={styles.avatar}></Image>
+          <Image style={styles.avatar}
+              source={post.user.avatar_url
+                  && {uri: 'https:'+post.user.avatar_url}
+                  || DEFAULT_AVATAR} />
           <View style={styles.rightContainer}>
             <Text style={styles.title}>{post.title}</Text>
           </View>
@@ -60,18 +65,36 @@ var Timeline = createClass({
           <Text style={styles.bottom}>{post.created_at}</Text>
         </View>
       </View>
+      </TouchableHighlight>
     )
   },
   fetchData () {
     fetch(TIMELINE_URL)
-      .then((rsp) => rsp.json())
-      .then((rspData) => {
-        this.setState({
-          data: this.state.data.cloneWithRows(rspData.data),
-          cursor: true
-        });
-      })
-      .done();
+      .then(rsp => rsp.json())
+      .then(data => this._handelRsp(data))
+      .catch(
+        error =>
+          this.setState({
+            isLoading: false,
+            message: 'Something bad happened ' + error
+          })
+      );
+  },
+  _handelRsp (rsp) {
+    console.log(rsp)
+    this.setState({
+      data: this.state.data.cloneWithRows(rsp.data),
+      cursor: true
+    });
+  },
+  jumpToPost (id) {
+    this.props.navigator.push({
+      name: 'Post page',
+      component: Post,
+      passProps: {
+        postId: id
+      }
+    });
   }
 })
 
@@ -125,6 +148,7 @@ const styles = StyleSheet.create({
   listView: {
     backgroundColor: '#f5fdfd',
     paddingTop: 30,
+    marginTop: 50,
   }
 });
 
