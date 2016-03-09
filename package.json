@@ -6,7 +6,8 @@
     "start": "node node_modules/react-native/local-cli/cli.js start"
   },
   "dependencies": {
+    "dimensions": "^0.1.0",
     "react-native": "^0.20.0",
-    "react-native-htmlview": "^0.2.0"
+    "react-native-html-render": "^1.0.3"
   }
 }

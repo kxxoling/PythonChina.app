@@ -7,10 +7,9 @@ import React, {
   Image,
   ListView,
 } from 'react-native';
-import HTMLView from 'react-native-htmlview'
+import HTMLNode from '../components/HTMLNode'
 
 import { DEFAULT_AVATAR } from '../config'
-import CodeStyle from '../styles/code'
 
 var Post = createClass({
   getInitialState () {
@@ -43,6 +42,7 @@ var Post = createClass({
       </View>
     )
   },
+
   renderPost (post) {
     if (!this.state.postGot) {
       return this.renderLoadingView();
@@ -57,9 +57,7 @@ var Post = createClass({
             <Text style={styles.title}>{post.title}</Text>
           </View>
         </View>
-        <HTMLView value={post.content}
-            stylesheet={CodeStyle}
-          />
+        <HTMLNode content={post.content} />
         <View style={styles.bottomContainer}>
           <Text style={styles.name}>{post.user.name || post.user.username}</Text>
           <Text style={styles.bottom}>{post.view_count} views</Text>
@@ -90,9 +88,7 @@ var Post = createClass({
           <View style={styles.rightHeader}>
             <Text>{comment.user.name || comment.user.username }</Text>
           </View>
-          <HTMLView value={comment.content}
-            stylesheet={CodeStyle}
-          />
+          <HTMLNode content={comment.content} />
         </View>
       </View>
     )
@@ -181,3 +177,4 @@ const styles = StyleSheet.create({
 });
 
 export default Post;
+
