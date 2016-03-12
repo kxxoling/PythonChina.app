@@ -7,7 +7,9 @@ import React, {
   ListView,
   View,
   TouchableHighlight,
-  Image
+  Image,
+  ScrollView,
+  RefreshControl,
 } from 'react-native';
 
 import { TIMELINE_URL, DEFAULT_AVATAR } from '../config'
@@ -16,6 +18,7 @@ import Post from './Post'
 var Timeline = createClass({
   getInitialState () {
     return {
+      isRefreshing: false,
       data: new ListView.DataSource({
         rowHasChanged (row1, row2) {return row1 !== row2}
       }),
@@ -27,14 +30,27 @@ var Timeline = createClass({
       return this.renderLoadingView();
     }
     return (
-      <ListView style={styles.listView}
-          dataSource={this.state.data}
-          renderRow={this.renderPost}>
-      </ListView>
+      <ScrollView showsVerticalScrollIndicator={false}
+          style={{flex: 1}}
+          refreshControl={
+            <RefreshControl
+                refreshing={this.state.isRefreshing}
+                onRefresh={this._fetchNewData}
+                tintColor="#ff0000"
+                title="Loading..."
+                colors={['#ff0000', '#00ff00', '#0000ff']}
+                progressBackgroundColor="#ffff00"
+              />
+          }>
+        <ListView style={styles.listView}
+            dataSource={this.state.data}
+            renderRow={this.renderPost}>
+        </ListView>
+      </ScrollView>
     );
   },
   componentDidMount () {
-    this.fetchData();
+    this._fetchData();
   },
   renderLoadingView () {
     return (
@@ -68,8 +84,8 @@ var Timeline = createClass({
       </TouchableHighlight>
     )
   },
-  fetchData () {
-    fetch(TIMELINE_URL)
+  _fetchData () {
+    return fetch(TIMELINE_URL)
       .then(rsp => rsp.json())
       .then(data => this._handelRsp(data))
       .catch(
@@ -79,6 +95,15 @@ var Timeline = createClass({
             message: 'Something bad happened ' + error
           })
       );
+  },
+  _fetchNewData () {
+    this.setState({isRefreshing: true});
+    this._fetchData()
+      .then(() => {
+        this.setState({
+          isRefreshing: false
+        });
+      });
   },
   _handelRsp (rsp) {
     console.log(rsp)
