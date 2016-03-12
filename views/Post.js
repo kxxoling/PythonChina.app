@@ -6,6 +6,7 @@ import React, {
   View,
   Image,
   ListView,
+  ScrollView,
 } from 'react-native';
 import HTMLNode from '../components/HTMLNode'
 
@@ -25,27 +26,28 @@ var Post = createClass({
   },
   render () {
     return (
-      <View style={styles.mainContainer}>
+      <ScrollView style={styles.mainContainer}
+          showsVerticalScrollIndicator={false}>
         {this.renderPost(this.state.post)}
         {this.renderComments()}
-      </View>
+      </ScrollView>
     );
   },
   componentDidMount () {
     this.fetchPost();
     this.fetchComments();
   },
-  renderLoadingView () {
+  renderLoadingView (string) {
     return (
       <View style={styles.loadingContainer}>
-        <Text style={styles.loading}>Loading...</Text>
+        <Text style={styles.loading}>Loading {string}...</Text>
       </View>
     )
   },
 
   renderPost (post) {
     if (!this.state.postGot) {
-      return this.renderLoadingView();
+      return this.renderLoadingView('post');
     }
     return (
       <View style={styles.postContainer}>
@@ -70,7 +72,7 @@ var Post = createClass({
   },
   renderComments () {
     if (!this.state.commentsGot) {
-      return this.renderLoadingView();
+      return this.renderLoadingView('comments');
     }
     return (
       <ListView style={styles.listView}
@@ -131,7 +133,6 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     margin: 8,
-    marginTop: 60,
   },
   container: {
     flex: 1,
