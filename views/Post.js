@@ -7,10 +7,12 @@ import React, {
   Image,
   ListView,
   ScrollView,
+  TouchableHighlight,
 } from 'react-native';
 import HTMLNode from '../components/HTMLNode'
 
 import { DEFAULT_AVATAR } from '../config'
+import ActivityView from 'react-native-activity-view';
 
 var Post = createClass({
   getInitialState () {
@@ -23,6 +25,23 @@ var Post = createClass({
       commentsGot: false,
       postId: this.props.postId,
     }
+  },
+  getShareData () {
+    return {
+      url: `https://python-china.org/t/${this.state.postId}`,
+      title: this.state.post.title,
+      summary: this.state.post.content,
+      imageUrl: 'https://python-china.org/apple-touch-icon-120.png',
+    }
+  },
+  _pressHandler () {
+    var data = this.getShareData()
+    console.log(data);
+    ActivityView.show({
+      text: data.title,
+      url: data.url,
+      imageUrl: data.imageUrl,
+    });
   },
   render () {
     return (
@@ -67,6 +86,10 @@ var Post = createClass({
           <Text style={styles.bottom}>{post.like_count} likes</Text>
           <Text style={styles.bottom}>{post.created_at}</Text>
         </View>
+        <TouchableHighlight
+            onPress={this._pressHandler} >
+          <Text ref="share">Share</Text>
+        </TouchableHighlight>
       </View>
     )
   },
