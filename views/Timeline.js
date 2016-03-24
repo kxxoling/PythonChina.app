@@ -10,10 +10,13 @@ import React, {
   Image,
   ScrollView,
   RefreshControl,
+  TabBarIOS,
 } from 'react-native';
 
 import { TIMELINE_URL, DEFAULT_AVATAR } from '../config'
 import Post from './Post'
+
+var base64Icon = 'data:image/png;base64,';
 
 var Timeline = createClass({
   getInitialState () {
@@ -22,13 +25,14 @@ var Timeline = createClass({
       data: new ListView.DataSource({
         rowHasChanged (row1, row2) {return row1 !== row2}
       }),
+      selectedTab: 'all',
       cursor: null
     }
   },
   render () {
-    if (!this.state.cursor) {
-      return this.renderLoadingView();
-    }
+    return this._renderTab()
+  },
+  _renderList () {
     return (
       <ScrollView showsVerticalScrollIndicator={false}
           style={{flex: 1}}
@@ -42,15 +46,71 @@ var Timeline = createClass({
                 progressBackgroundColor="#ffff00"
               />
           }>
-        <ListView style={styles.listView}
-            dataSource={this.state.data}
-            renderRow={this.renderPost}>
-        </ListView>
+          {
+            this.state.cursor &&
+                <ListView style={styles.listView}
+                    dataSource={this.state.data}
+                    renderRow={this.renderPost}>
+                </ListView>
+                || this.renderLoadingView()
+          }
       </ScrollView>
     );
   },
+  _renderAll () {
+    return this._renderList()
+  },
+  _renderHome () {
+    return this._renderList()
+  },
   componentDidMount () {
     this._fetchData();
+  },
+  _renderTab () {
+    return <TabBarIOS
+        tintColor="blue"
+        barTintColor="white">
+      <TabBarIOS.Item
+          title="All"
+          icon={{uri: base64Icon, scale: 3}}
+          selected={this.state.selectedTab === 'all'}
+          onPress={() => {
+            this.setState({
+              selectedTab: 'all',
+            })
+          }}>
+        {this._renderAll()}
+      </TabBarIOS.Item>
+      <TabBarIOS.Item
+          title="Home"
+          icon={{uri: base64Icon, scale: 3}}
+          selected={this.state.selectedTab === 'home'}
+          onPress={() => {
+            this.setState({
+              selectedTab: 'home',
+            })
+          }}>
+        {this._renderHome()}
+      </TabBarIOS.Item>
+      <TabBarIOS.Item
+          title="Me"
+          icon={{uri: base64Icon, scale: 3}}
+          selected={this.state.selectedTab === 'me'}
+          onPress={() => {
+            this.setState({
+              selectedTab: 'me',
+            })
+          }}>
+        {this._renderWaiting()}
+      </TabBarIOS.Item>
+    </TabBarIOS>
+  },
+  _renderWaiting () {
+    return (
+      <View style={{flex: 1}}>
+        <Text style={{marginTop: 80}}>Waiting for implementation!</Text>
+      </View>
+    )
   },
   renderLoadingView () {
     return (
@@ -124,6 +184,14 @@ var Timeline = createClass({
 })
 
 const styles = StyleSheet.create({
+  tabContent: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  tabText: {
+    color: 'white',
+    margin: 50,
+  },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -173,7 +241,6 @@ const styles = StyleSheet.create({
   listView: {
     backgroundColor: '#f5fdfd',
     paddingTop: 30,
-    marginTop: 50,
   }
 });
 
