@@ -13,7 +13,7 @@ import React, {
   TabBarIOS,
 } from 'react-native';
 
-import { TIMELINE_URL, DEFAULT_AVATAR } from '../config'
+import { TIMELINE_URL, HOME_URL, DEFAULT_AVATAR } from '../config'
 import Post from './Post'
 
 var base64Icon = 'data:image/png;base64,';
@@ -39,7 +39,7 @@ var Timeline = createClass({
           refreshControl={
             <RefreshControl
                 refreshing={this.state.isRefreshing}
-                onRefresh={this._fetchNewData}
+                onRefresh={this._fetchAllData}
                 tintColor="#ff0000"
                 title="Loading..."
                 colors={['#ff0000', '#00ff00', '#0000ff']}
@@ -64,7 +64,7 @@ var Timeline = createClass({
     return this._renderList()
   },
   componentDidMount () {
-    this._fetchData();
+    this._fetchData(TIMELINE_URL);
   },
   _renderTab () {
     return <TabBarIOS
@@ -144,26 +144,30 @@ var Timeline = createClass({
       </TouchableHighlight>
     )
   },
-  _fetchData () {
-    return fetch(TIMELINE_URL)
+  _fetchData (apiUrl) {
+    this.setState({isRefreshing: true});
+    console.log('fetching', apiUrl)
+    return fetch(apiUrl)
       .then(rsp => rsp.json())
-      .then(data => this._handelRsp(data))
+      .then(data => {this._handelRsp(data);console.log(data)})
       .catch(
         error =>
           this.setState({
             isLoading: false,
             message: 'Something bad happened ' + error
           })
-      );
-  },
-  _fetchNewData () {
-    this.setState({isRefreshing: true});
-    this._fetchData()
+      )
       .then(() => {
         this.setState({
           isRefreshing: false
         });
       });
+  },
+  _fetchAllData () {
+    return this._fetchData(TIMELINE_URL)
+  },
+  _fetchHomeData () {
+    return this._fetchData(HOME_URL)
   },
   _handelRsp (rsp) {
     console.log(rsp)
