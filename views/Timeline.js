@@ -32,14 +32,20 @@ var Timeline = createClass({
   render () {
     return this._renderTab()
   },
-  _renderList () {
+  _renderList (tab) {
+    var fetcher
+    if (tab === 'all') {
+      fetcher = this._fetchAllData
+    } else if (tab === 'home') {
+      fetcher = this._fetchHomeData
+    }
     return (
       <ScrollView showsVerticalScrollIndicator={false}
           style={{flex: 1}}
           refreshControl={
             <RefreshControl
                 refreshing={this.state.isRefreshing}
-                onRefresh={this._fetchAllData}
+                onRefresh={fetcher}
                 tintColor="#ff0000"
                 title="Loading..."
                 colors={['#ff0000', '#00ff00', '#0000ff']}
@@ -58,10 +64,10 @@ var Timeline = createClass({
     );
   },
   _renderAll () {
-    return this._renderList()
+    return this._renderList('all')
   },
   _renderHome () {
-    return this._renderList()
+    return this._renderList('home')
   },
   componentDidMount () {
     this._fetchData(TIMELINE_URL);
