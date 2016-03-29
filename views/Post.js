@@ -8,11 +8,11 @@ import React, {
   ListView,
   ScrollView,
   TouchableHighlight,
+  ActionSheetIOS,
 } from 'react-native';
 import HTMLNode from '../components/HTMLNode'
 
 import { DEFAULT_AVATAR } from '../config'
-import ActivityView from 'react-native-activity-view';
 
 var Post = createClass({
   getInitialState () {
@@ -34,15 +34,6 @@ var Post = createClass({
       imageUrl: 'https://python-china.org/apple-touch-icon-120.png',
     }
   },
-  _pressHandler () {
-    var data = this.getShareData()
-    console.log(data);
-    ActivityView.show({
-      text: data.title,
-      url: data.url,
-      imageUrl: data.imageUrl,
-    });
-  },
   render () {
     return (
       <ScrollView style={styles.mainContainer}
@@ -63,7 +54,6 @@ var Post = createClass({
       </View>
     )
   },
-
   renderPost (post) {
     if (!this.state.postGot) {
       return this.renderLoadingView('post');
@@ -87,7 +77,7 @@ var Post = createClass({
           <Text style={styles.bottom}>{post.created_at}</Text>
         </View>
         <TouchableHighlight
-            onPress={this._pressHandler} >
+            onPress={this._share} >
           <Text ref="share">Share</Text>
         </TouchableHighlight>
       </View>
@@ -141,7 +131,22 @@ var Post = createClass({
         });
       })
       .done();
-  }
+  },
+  _share () {
+    var data = this.getShareData()
+    ActionSheetIOS.showShareActionSheetWithOptions({
+      message: data.title,
+      url: data.url,
+      excludedActivityTypes: [
+        'com.apple.UIKit.activity.PostToVimeo',
+        'com.apple.UIKit.activity.PostToFlickr'
+      ]
+    },
+    (error) => alert(error),
+    (success, method) => {
+      console.log('shared: ', data.url, success)
+    })
+  },
 })
 
 const styles = StyleSheet.create({
