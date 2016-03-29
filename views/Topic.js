@@ -14,23 +14,23 @@ import HTMLNode from '../components/HTMLNode'
 
 import { DEFAULT_AVATAR } from '../config'
 
-var Post = createClass({
+var Topic = createClass({
   getInitialState () {
     return {
       comments: new ListView.DataSource({
         rowHasChanged (row1, row2) {return row1 !== row2}
       }),
-      post: {},
-      postGot: false,
+      topic: {},
+      topicGot: false,
       commentsGot: false,
-      postId: this.props.postId,
+      topicId: this.props.topicId,
     }
   },
   getShareData () {
     return {
-      url: `https://python-china.org/t/${this.state.postId}`,
-      title: this.state.post.title,
-      summary: this.state.post.content,
+      url: `https://python-china.org/t/${this.state.topicId}`,
+      title: this.state.topic.title,
+      summary: this.state.topic.content,
       imageUrl: 'https://python-china.org/apple-touch-icon-120.png',
     }
   },
@@ -38,13 +38,13 @@ var Post = createClass({
     return (
       <ScrollView style={styles.mainContainer}
           showsVerticalScrollIndicator={false}>
-        {this.renderPost(this.state.post)}
+        {this.renderTopic(this.state.topic)}
         {this.renderComments()}
       </ScrollView>
     );
   },
   componentDidMount () {
-    this.fetchPost();
+    this.fetchTopic();
     this.fetchComments();
   },
   renderLoadingView (string) {
@@ -54,27 +54,27 @@ var Post = createClass({
       </View>
     )
   },
-  renderPost (post) {
-    if (!this.state.postGot) {
-      return this.renderLoadingView('post');
+  renderTopic (topic) {
+    if (!this.state.topicGot) {
+      return this.renderLoadingView('topic');
     }
     return (
-      <View style={styles.postContainer}>
+      <View style={styles.topicContainer}>
         <View style={styles.container}>
           <Image
-              source={post.user.avatar_url && {uri: 'https:'+post.user.avatar_url} || DEFAULT_AVATAR}
+              source={topic.user.avatar_url && {uri: 'https:' + topic.user.avatar_url} || DEFAULT_AVATAR}
               style={styles.avatar}></Image>
           <View style={styles.rightContainer}>
-            <Text style={styles.title}>{post.title}</Text>
+            <Text style={styles.title}>{topic.title}</Text>
           </View>
         </View>
-        <HTMLNode content={post.content} />
+        <HTMLNode content={topic.content} />
         <View style={styles.bottomContainer}>
-          <Text style={styles.name}>{post.user.name || post.user.username}</Text>
-          <Text style={styles.bottom}>{post.view_count} views</Text>
-          <Text style={styles.bottom}>{post.comment_count} replies</Text>
-          <Text style={styles.bottom}>{post.like_count} likes</Text>
-          <Text style={styles.bottom}>{post.created_at}</Text>
+          <Text style={styles.name}>{topic.user.name || topic.user.username}</Text>
+          <Text style={styles.bottom}>{topic.view_count} views</Text>
+          <Text style={styles.bottom}>{topic.comment_count} replies</Text>
+          <Text style={styles.bottom}>{topic.like_count} likes</Text>
+          <Text style={styles.bottom}>{topic.created_at}</Text>
         </View>
         <TouchableHighlight
             onPress={this._share} >
@@ -108,20 +108,20 @@ var Post = createClass({
       </View>
     )
   },
-  fetchPost () {
-    var url = `https://python-china.org/api/topics/${this.state.postId}`;
+  fetchTopic () {
+    var url = `https://python-china.org/api/topics/${this.state.topicId}`;
     fetch(url)
       .then((rsp) => rsp.json())
       .then((rspData) => {
         this.setState({
-          post: rspData,
-          postGot: true
+          topic: rspData,
+          topicGot: true
         });
       })
       .done();
   },
   fetchComments () {
-    var url = `https://python-china.org/api/topics/${this.state.postId}/comments?order=asc`
+    var url = `https://python-china.org/api/topics/${this.state.topicId}/comments?order=asc`
     fetch(url)
       .then((rsp) => rsp.json())
       .then((rspData) => {
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     marginBottom: 8,
   },
-  postContainer: {
+  topicContainer: {
     marginTop: 16,
   },
   rightContainer: {
@@ -205,5 +205,5 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Post;
+export default Topic;
 

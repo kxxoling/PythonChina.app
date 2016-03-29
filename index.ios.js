@@ -6,7 +6,7 @@ import React, {
 } from 'react-native';
 
 import Timeline from './views/Timeline';
-import Post from './views/Post';
+import Post from './views/Topic';
 
 var Router = createClass({
   render () {

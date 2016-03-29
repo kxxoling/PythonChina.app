@@ -14,7 +14,7 @@ import React, {
 } from 'react-native';
 
 import { TIMELINE_URL, HOME_URL, DEFAULT_AVATAR } from '../config'
-import Post from './Post'
+import Topic from './Topic'
 
 var base64Icon = 'data:image/png;base64,';
 
@@ -56,7 +56,7 @@ var Timeline = createClass({
             this.state.cursor &&
                 <ListView style={styles.listView}
                     dataSource={this.state.data}
-                    renderRow={this.renderPost}>
+                    renderRow={this.renderTopic}>
                 </ListView>
                 || this.renderLoadingView()
           }
@@ -125,26 +125,26 @@ var Timeline = createClass({
       </View>
     )
   },
-  renderPost (post) {
+  renderTopic (topic) {
     return (
       <TouchableHighlight onDelayColor='#dddddd'
-          onPress={() => this.jumpToPost(post.id)}>
+          onPress={() => this.jumpToTopic(topic.id)}>
       <View style={styles.mainContainer}>
         <View style={styles.container}>
           <Image style={styles.avatar}
-              source={post.user.avatar_url
-                  && {uri: 'https:'+post.user.avatar_url}
+              source={topic.user.avatar_url
+                  && {uri: 'https:'+topic.user.avatar_url}
                   || DEFAULT_AVATAR} />
           <View style={styles.rightContainer}>
-            <Text style={styles.title}>{post.title}</Text>
+            <Text style={styles.title}>{topic.title}</Text>
           </View>
         </View>
         <View style={styles.bottomContainer}>
-          <Text style={styles.name}>{post.user.name || post.user.username}</Text>
-          <Text style={styles.bottom}>{post.view_count} views</Text>
-          <Text style={styles.bottom}>{post.comment_count} replies</Text>
-          <Text style={styles.bottom}>{post.like_count} likes</Text>
-          <Text style={styles.bottom}>{post.created_at}</Text>
+          <Text style={styles.name}>{topic.user.name || topic.user.username}</Text>
+          <Text style={styles.bottom}>{topic.view_count} views</Text>
+          <Text style={styles.bottom}>{topic.comment_count} replies</Text>
+          <Text style={styles.bottom}>{topic.like_count} likes</Text>
+          <Text style={styles.bottom}>{topic.created_at}</Text>
         </View>
       </View>
       </TouchableHighlight>
@@ -182,12 +182,12 @@ var Timeline = createClass({
       cursor: true
     });
   },
-  jumpToPost (id) {
+  jumpToTopic (id) {
     this.props.navigator.push({
-      name: 'Post page',
-      component: Post,
+      name: 'Topic page',
+      component: Topic,
       passProps: {
-        postId: id
+        topicId: id
       }
     });
   }
