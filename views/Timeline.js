@@ -15,6 +15,7 @@ import React, {
 
 import { TIMELINE_URL, HOME_URL, DEFAULT_AVATAR } from '../config'
 import Topic from './Topic'
+import Login from '../components/Login'
 
 var base64Icon = 'data:image/png;base64,';
 
@@ -107,15 +108,13 @@ var Timeline = createClass({
               selectedTab: 'me',
             })
           }}>
-        {this._renderWaiting()}
+        {this._renderLogin()}
       </TabBarIOS.Item>
     </TabBarIOS>
   },
-  _renderWaiting () {
+  _renderLogin () {
     return (
-      <View style={{flex: 1}}>
-        <Text style={{marginTop: 80}}>Waiting for implementation!</Text>
-      </View>
+      <Login />
     )
   },
   renderLoadingView () {
