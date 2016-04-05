@@ -3,11 +3,20 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "lint": "node node_modules/eslint/bin/eslint.js .",
+    "fix": "node node_modules/eslint/bin/eslint.js . --fix",
     "start": "node node_modules/react-native/local-cli/cli.js start"
   },
   "dependencies": {
     "dimensions": "^0.1.0",
     "react-native": "^0.20.0",
     "react-native-html-render": "^1.0.3"
+  },
+  "devDependencies": {
+    "babel-eslint": "^6.0.2",
+    "eslint": "^2.7.0",
+    "eslint-config-airbnb": "^6.2.0",
+    "eslint-plugin-react": "^4.2.3",
+    "eslint-plugin-react-native": "^1.0.0"
   }
 }
