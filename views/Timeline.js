@@ -31,7 +31,7 @@ var Timeline = createClass({
     }
   },
   render () {
-    return this._renderTab()
+    return this._renderHome()
   },
   _renderList (tab) {
     var fetcher
