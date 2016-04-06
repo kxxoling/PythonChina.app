@@ -1,6 +1,5 @@
-'use strict';
 import React, {
-  createClass,
+  Component,
   StyleSheet,
   Text,
   View,
@@ -10,153 +9,18 @@ import React, {
   TouchableHighlight,
   ActionSheetIOS,
 } from 'react-native';
-import HTMLNode from '../components/HTMLNode'
+import HTMLNode from '../components/HTMLNode';
 
-import { DEFAULT_AVATAR } from '../config'
-
-var Topic = createClass({
-  getInitialState () {
-    return {
-      comments: new ListView.DataSource({
-        rowHasChanged (row1, row2) {return row1 !== row2}
-      }),
-      topic: {},
-      topicGot: false,
-      commentsGot: false,
-      topicId: this.props.topicId,
-    }
-  },
-  getShareData () {
-    return {
-      url: `https://python-china.org/t/${this.state.topicId}`,
-      title: this.state.topic.title,
-      summary: this.state.topic.content,
-      imageUrl: 'https://python-china.org/apple-touch-icon-120.png',
-    }
-  },
-  render () {
-    return (
-      <ScrollView style={styles.mainContainer}
-          showsVerticalScrollIndicator={false}>
-        {this.renderTopic(this.state.topic)}
-        {this.renderComments()}
-      </ScrollView>
-    );
-  },
-  componentDidMount () {
-    this.fetchTopic();
-    this.fetchComments();
-  },
-  renderLoadingView (string) {
-    return (
-      <View style={styles.loadingContainer}>
-        <Text style={styles.loading}>Loading {string}...</Text>
-      </View>
-    )
-  },
-  renderTopic (topic) {
-    if (!this.state.topicGot) {
-      return this.renderLoadingView('topic');
-    }
-    return (
-      <View style={styles.topicContainer}>
-        <View style={styles.container}>
-          <Image
-              source={topic.user.avatar_url && {uri: 'https:' + topic.user.avatar_url} || DEFAULT_AVATAR}
-              style={styles.avatar}></Image>
-          <View style={styles.rightContainer}>
-            <Text style={styles.title}>{topic.title}</Text>
-          </View>
-        </View>
-        <HTMLNode content={topic.content} />
-        <View style={styles.bottomContainer}>
-          <Text style={styles.name}>{topic.user.name || topic.user.username}</Text>
-          <Text style={styles.bottom}>{topic.view_count} views</Text>
-          <Text style={styles.bottom}>{topic.comment_count} replies</Text>
-          <Text style={styles.bottom}>{topic.like_count} likes</Text>
-          <Text style={styles.bottom}>{topic.created_at}</Text>
-        </View>
-        <TouchableHighlight
-            onPress={this._share} >
-          <Text ref="share">Share</Text>
-        </TouchableHighlight>
-      </View>
-    )
-  },
-  renderComments () {
-    if (!this.state.commentsGot) {
-      return this.renderLoadingView('comments');
-    }
-    return (
-      <ListView style={styles.listView}
-        dataSource={this.state.comments}
-        renderRow={(data) => this.renderComment(data)} />
-    )
-  },
-  renderComment (comment) {
-    return (
-      <View style={styles.container}>
-        <Image style={styles.avatar}
-            source={comment.user.avatar_url && {uri: 'https:' + comment.user.avatar_url} || DEFAULT_AVATAR}
-          />
-        <View style={styles.rightContainer}>
-          <View style={styles.rightHeader}>
-            <Text>{comment.user.name || comment.user.username }</Text>
-          </View>
-          <HTMLNode content={comment.content} />
-        </View>
-      </View>
-    )
-  },
-  fetchTopic () {
-    var url = `https://python-china.org/api/topics/${this.state.topicId}`;
-    fetch(url)
-      .then((rsp) => rsp.json())
-      .then((rspData) => {
-        this.setState({
-          topic: rspData,
-          topicGot: true
-        });
-      })
-      .done();
-  },
-  fetchComments () {
-    var url = `https://python-china.org/api/topics/${this.state.topicId}/comments?order=asc`
-    fetch(url)
-      .then((rsp) => rsp.json())
-      .then((rspData) => {
-        this.setState({
-          comments: this.state.comments.cloneWithRows(rspData.data),
-          commentsGot: true
-        });
-      })
-      .done();
-  },
-  _share () {
-    var data = this.getShareData()
-    ActionSheetIOS.showShareActionSheetWithOptions({
-      message: data.title,
-      url: data.url,
-      excludedActivityTypes: [
-        'com.apple.UIKit.activity.PostToVimeo',
-        'com.apple.UIKit.activity.PostToFlickr'
-      ]
-    },
-    (error) => alert(error),
-    (success, method) => {
-      console.log('shared: ', data.url, success)
-    })
-  },
-})
+import { DEFAULT_AVATAR } from '../config';
 
 const styles = StyleSheet.create({
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   loading: {
-    fontSize: 36
+    fontSize: 36,
   },
   mainContainer: {
     flex: 1,
@@ -173,7 +37,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   rightContainer: {
-    flex: 1
+    flex: 1,
   },
   bottomContainer: {
     flex: 1,
@@ -192,7 +56,7 @@ const styles = StyleSheet.create({
   },
   avatar: {
     width: 50,
-    height: 50
+    height: 50,
   },
   title: {
     fontSize: 20,
@@ -202,8 +66,153 @@ const styles = StyleSheet.create({
   listView: {
     flex: 1,
     paddingTop: 30,
-  }
+  },
 });
 
-export default Topic;
+class Topic extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      comments: new ListView.DataSource({
+        rowHasChanged(row1, row2) { return row1 !== row2; },
+      }),
+      topic: {},
+      topicGot: false,
+      commentsGot: false,
+      topicId: this.props.topicId,
+    };
+  }
+  componentDidMount() {
+    this.fetchTopic();
+    this.fetchComments();
+  }
+  getShareData() {
+    return {
+      url: `https://python-china.org/t/${this.state.topicId}`,
+      title: this.state.topic.title,
+      summary: this.state.topic.content,
+      imageUrl: 'https://python-china.org/apple-touch-icon-120.png',
+    };
+  }
+  _share() {
+    const data = this.getShareData();
+    ActionSheetIOS.showShareActionSheetWithOptions(
+      {
+        message: data.title,
+        url: data.url,
+        excludedActivityTypes: [
+          'com.apple.UIKit.activity.PostToVimeo',
+          'com.apple.UIKit.activity.PostToFlickr',
+        ],
+      },
+      (error) => alert(error),
+      (success) => {
+        console.log('shared: ', data.url, success);
+      }
+    );
+  }
+  fetchTopic() {
+    const url = `https://python-china.org/api/topics/${this.state.topicId}`;
+    fetch(url)
+      .then((rsp) => rsp.json())
+      .then((rspData) => {
+        this.setState({
+          topic: rspData,
+          topicGot: true,
+        });
+      })
+      .done();
+  }
+  fetchComments() {
+    const url = `https://python-china.org/api/topics/${this.state.topicId}/comments?order=asc`;
+    fetch(url)
+      .then((rsp) => rsp.json())
+      .then((rspData) => {
+        this.setState({
+          comments: this.state.comments.cloneWithRows(rspData.data),
+          commentsGot: true,
+        });
+      })
+      .done();
+  }
+  renderLoadingView(string) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Text style={styles.loading}>Loading {string}...</Text>
+      </View>
+    );
+  }
+  renderTopic(topic) {
+    if (!this.state.topicGot) {
+      return this.renderLoadingView('topic');
+    }
+    let img = topic.user.avatar_url && { uri: `https:${topic.user.avatar_url}` } || DEFAULT_AVATAR;
+    return (
+      <View style={styles.topicContainer}>
+        <View style={styles.container}>
+          <Image source={img}
+            style={styles.avatar}
+          />
+          <View style={styles.rightContainer}>
+            <Text style={styles.title}>{topic.title}</Text>
+          </View>
+        </View>
+        <HTMLNode content={topic.content} />
+        <View style={styles.bottomContainer}>
+          <Text style={styles.name}>{topic.user.name || topic.user.username}</Text>
+          <Text style={styles.bottom}>{topic.view_count} views</Text>
+          <Text style={styles.bottom}>{topic.comment_count} replies</Text>
+          <Text style={styles.bottom}>{topic.like_count} likes</Text>
+          <Text style={styles.bottom}>{topic.created_at}</Text>
+        </View>
+        <TouchableHighlight
+          onPress={this._share}
+        >
+          <Text ref="share">Share</Text>
+        </TouchableHighlight>
+      </View>
+    );
+  }
+  renderComments() {
+    if (!this.state.commentsGot) {
+      return this.renderLoadingView('comments');
+    }
+    return (
+      <ListView style={styles.listView}
+        dataSource={this.state.comments}
+        renderRow={(data) => this.renderComment(data)}
+      />
+    );
+  }
+  renderComment(comment) {
+    const avatar = comment.user.avatar_url
+        && { uri: `https:${comment.user.avatar_url}` } || DEFAULT_AVATAR;
+    return (
+      <View style={styles.container}>
+        <Image style={styles.avatar} source={avatar} />
+        <View style={styles.rightContainer}>
+          <View style={styles.rightHeader}>
+            <Text>{comment.user.name || comment.user.username }</Text>
+          </View>
+          <HTMLNode content={comment.content} />
+        </View>
+      </View>
+    );
+  }
+  render() {
+    return (
+      <ScrollView style={styles.mainContainer}
+        showsVerticalScrollIndicator={false}
+      >
+        {this.renderTopic(this.state.topic)}
+        {this.renderComments()}
+      </ScrollView>
+    );
+  }
+}
 
+Topic.propTypes = {
+  topicId: React.PropTypes.number,
+};
+
+export default Topic;

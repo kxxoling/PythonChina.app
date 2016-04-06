@@ -1,89 +1,96 @@
 import React, {
   StyleSheet,
   Image,
-  Component
+  Component,
 } from 'react-native';
+
+import HtmlRender from 'react-native-html-render';
 import Dimensions from 'Dimensions';
 
-import HtmlRender from 'react-native-html-render'
+const { width, height } = (function getWidthHeight() {
+  return Dimensions.get('window');
+}());
 
-var { width, height } = (function () {
-  return Dimensions.get('window')
-})()
-
-var contentFontSize = 16
-
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   img: {
     width: width - 30,
-    height: width - 30,
-    resizeMode: Image.resizeMode.contain
-  }
-})
+    height: height - 30,
+    resizeMode: Image.resizeMode.contain,
+  },
+});
 
-var regs = {
+const regs = {
   links: {
     link: /^https?:\/\/.*/,
     topic: /^https?:\/\/python-china\.org\/topic\/\w*/,
-    user: /^https?:\/\/python-china\.org\/user\/\w*/
-  }
-}
+    user: /^https?:\/\/python-china\.org\/user\/\w*/,
+  },
+};
 
 class HTMLNode extends Component {
   constructor(props) {
-    super(props)
+    super(props);
+    this._onLinkPress = this._onLinkPress.bind(this);
+    this._renderNode = this._renderNode.bind(this);
   }
-  _onLinkPress (url) {
-    let router = this.props.router
 
-    if (reg.links.link.test(url)) {
+  _onLinkPress(url) {
+    if (regs.links.link.test(url)) {
       if (regs.links.topic.test(url)) {
-        let topicId = url.replace(/^https?:\/\/python-china\.org\/topic\//, '')
-        console.log(topicId)
+        const topicId = url.replace(/^https?:\/\/python-china\.org\/topic\//, '');
+        console.log(topicId);
       }
 
       if (regs.links.user.test(url)) {
-        let userName = url.replace(/^https?:\/\/python-china\.org\/user\//, '')
-        console.log(userName)
+        const userName = url.replace(/^https?:\/\/python-china\.org\/user\//, '');
+        console.log(userName);
       }
     }
 
     if (/^mailto:\w*/.test(url)) {
-      console.log('A mail!')
+      console.log('A mail!');
     }
+    return;
   }
-  _renderNode(node, index, parent, type) {
-    let name = node.name
+  _renderNode(_node, index, parent, type) {
+    let node = _node;
+    const name = node.name;
 
-    var imgStyle = (this.props.style && this.props.style.img) || styles.img
+    const imgStyle = (this.props.style && this.props.style.img) || styles.img;
     if (node.type === 'figure') {
-      node = node.children[0]
+      node = node.children[0];
     }
 
     if (node.type === 'block' && type === 'block') {
       if (name === 'img') {
-        var uri = node.attribs.src
-        if (/.*\.gif$/.test(uri)) return null
-          return (
-            <Image
-                key={index}
-                source={{uri:uri}}
-                style={imgStyle} />
-          )
+        const uri = node.attribs.src;
+        if (/.*\.gif$/.test(uri)) return null;
+        return (
+          <Image
+            key={index}
+            source={{ uri }}
+            style={imgStyle}
+          />
+        );
       }
     }
+    return undefined;
   }
-  render () {
+  render() {
     return (
       <HtmlRender
-          value={this.props.content}
-          stylesheet={this.props.style}
-          onLinkPress={this._onLinkPress.bind(this)}
-          renderNode={this._renderNode.bind(this)}
-        />
-    )
+        value={this.props.content}
+        stylesheet={this.props.style}
+        onLinkPress={this._onLinkPress}
+        renderNode={this._renderNode}
+      />
+    );
   }
 }
 
-module.exports = HTMLNode
+HTMLNode.propTypes = {
+  style: React.PropTypes.object,
+  content: React.PropTypes.string,
+};
 
+module.exports = HTMLNode;
