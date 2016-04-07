@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "dimensions": "^0.1.0",
-    "react-native": "^0.20.0",
+    "react": "^0.14.8",
+    "react-native": "^0.23.1",
     "react-native-html-render": "^1.0.3"
   },
   "devDependencies": {
