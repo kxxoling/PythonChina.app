@@ -10,12 +10,11 @@ import React, {
   RefreshControl,
   TabBarIOS,
 } from 'react-native';
+import { TabBarItemIOS } from 'react-native-vector-icons/FontAwesome';
 
 import { TIMELINE_URL, HOME_URL, DEFAULT_AVATAR } from '../config';
 import Topic from './Topic';
 import Login from '../components/Login';
-
-const base64Icon = 'data:image/png;base64,';
 
 const styles = StyleSheet.create({
   tabContent: {
@@ -86,7 +85,7 @@ class Timeline extends Component {
       data: new ListView.DataSource({
         rowHasChanged(row1, row2) { return row1 !== row2; },
       }),
-      selectedTab: 'all',
+      selectedTab: 'home',
       cursor: null,
     };
     this._renderTopic = this._renderTopic.bind(this);
@@ -215,21 +214,9 @@ class Timeline extends Component {
         tintColor="blue"
         barTintColor="white"
       >
-        <TabBarIOS.Item
-          title="All"
-          icon={{ uri: base64Icon, scale: 3 }}
-          selected={this.state.selectedTab === 'all'}
-          onPress={() => {
-            this.setState({
-              selectedTab: 'all',
-            });
-          }}
-        >
-          {this._renderAll()}
-        </TabBarIOS.Item>
-        <TabBarIOS.Item
+        <TabBarItemIOS
           title="Home"
-          icon={{ uri: base64Icon, scale: 3 }}
+          iconName="home"
           selected={this.state.selectedTab === 'home'}
           onPress={() => {
             this.setState({
@@ -238,10 +225,22 @@ class Timeline extends Component {
           }}
         >
           {this._renderHome()}
-        </TabBarIOS.Item>
-        <TabBarIOS.Item
+        </TabBarItemIOS>
+        <TabBarItemIOS
+          title="All"
+          iconName="compass"
+          selected={this.state.selectedTab === 'all'}
+          onPress={() => {
+            this.setState({
+              selectedTab: 'all',
+            });
+          }}
+        >
+          {this._renderAll()}
+        </TabBarItemIOS>
+        <TabBarItemIOS
           title="Me"
-          icon={{ uri: base64Icon, scale: 3 }}
+          iconName="user"
           selected={this.state.selectedTab === 'me'}
           onPress={() => {
             this.setState({
@@ -250,7 +249,7 @@ class Timeline extends Component {
           }}
         >
           {this._renderLogin()}
-        </TabBarIOS.Item>
+        </TabBarItemIOS>
       </TabBarIOS>);
   }
   _renderLogin() {

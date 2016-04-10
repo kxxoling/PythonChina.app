@@ -3,9 +3,9 @@ import React, {
   StyleSheet,
   Text,
   View,
-  TouchableHighlight,
   TextInput,
 } from 'react-native';
+import { Button } from 'react-native-vector-icons/FontAwesome';
 
 import { LOGIN_URL } from '../config';
 
@@ -25,6 +25,7 @@ class Login extends Component {
       username: '',
       password: '',
     };
+    this.login = this.login.bind(this);
   }
   login() {
     const hash = btoa(`${this.state.username}:${this.state.password}`);
@@ -53,11 +54,13 @@ class Login extends Component {
           onChangeText={(password) => this.setState({ password })}
           value={this.state.password}
         />
-        <TouchableHighlight onDelayColor="#dddddd"
+        <Button name="sign-in" backgroundColor="#42b983"
           onPress={this.login}
         >
-          <Text>登录</Text>
-        </TouchableHighlight>
+          <Text
+            style={{ color: '#ddd' }}
+          >登录</Text>
+        </Button>
       </View>
     );
   }

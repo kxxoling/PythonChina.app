@@ -6,9 +6,10 @@ import React, {
   Image,
   ListView,
   ScrollView,
-  TouchableHighlight,
   ActionSheetIOS,
 } from 'react-native';
+import { Button } from 'react-native-vector-icons/FontAwesome';
+
 import HTMLNode from '../components/HTMLNode';
 
 import { DEFAULT_AVATAR } from '../config';
@@ -81,6 +82,7 @@ class Topic extends Component {
       commentsGot: false,
       topicId: this.props.topicId,
     };
+    this._share = this._share.bind(this);
   }
   componentDidMount() {
     this.fetchTopic();
@@ -165,11 +167,12 @@ class Topic extends Component {
           <Text style={styles.bottom}>{topic.like_count} likes</Text>
           <Text style={styles.bottom}>{topic.created_at}</Text>
         </View>
-        <TouchableHighlight
+        <Button
+          name="share-alt"
           onPress={this._share}
         >
-          <Text ref="share">Share</Text>
-        </TouchableHighlight>
+          <Text ref="share" style={{ color: '#ddd' }}>Share</Text>
+        </Button>
       </View>
     );
   }
