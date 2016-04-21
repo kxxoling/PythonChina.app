@@ -12,7 +12,10 @@
     "react": "^15.1.0",
     "react-native": "^0.27.2",
     "react-native-html-render": "^1.0.3",
-    "react-native-vector-icons": "^2.0.3"
+    "react-native-vector-icons": "^2.0.3",
+    "react-redux": "^4.4.2",
+    "redux": "^3.5.1",
+    "redux-thunk": "^2.0.1"
   },
   "devDependencies": {
     "babel-eslint": "^6.0.4",

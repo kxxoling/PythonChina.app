@@ -3,9 +3,16 @@ import {
   NavigatorIOS,
   AppRegistry,
 } from 'react-native';
+import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
 
+import reducers from './reducers';
 import Timeline from './views/Timeline';
 // import Post from './views/Topic';
+const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
+const reducer = combineReducers(reducers);
+const store = createStoreWithMiddleware(reducer);
 
 class Router extends Component {
   constructor(props) {
@@ -14,10 +21,11 @@ class Router extends Component {
   }
   render() {
     return (
-      <NavigatorIOS
-        style={{ flex: 1 }}
-        initialRoute={{ title: 'Python China', component: Timeline }}
-      />
+      <Provider store={store}>
+        <NavigatorIOS style={{ flex: 1 }}
+          initialRoute={{ title: 'Python China', component: Timeline }}
+        />
+      </Provider>
     );
   }
 }
