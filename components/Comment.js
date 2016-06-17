@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
 });
 
 export default class Comment extends Component {
+  handleLike() {}
 
   render() {
     const comment = this.props.comment;
@@ -38,7 +39,7 @@ export default class Comment extends Component {
         <Image style={styles.avatar} source={avatar} />
         <View style={styles.rightContainer}>
           <View style={styles.rightHeader}>
-            <Text>{comment.user.name || comment.user.username }</Text>
+            <Text>{comment.user.name || comment.user.username}</Text>
           </View>
           <HTMLNode content={comment.content} />
         </View>

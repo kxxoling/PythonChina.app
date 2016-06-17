@@ -1,5 +1,4 @@
-import React, {
-  Component } from 'react';
+import React, { Component } from 'react';
 import {
   StyleSheet,
   Text,
@@ -89,15 +88,15 @@ class Timeline extends Component {
       selectedTab: 'home',
       cursor: null,
     };
-    this._renderTopic = this._renderTopic.bind(this);
-    this._fetchData = this._fetchData.bind(this);
-    this._fetchAllData = this._fetchAllData.bind(this);
-    this._fetchHomeData = this._fetchHomeData.bind(this);
+    this.renderTopic = this.renderTopic.bind(this);
+    this.fetchData = this.fetchData.bind(this);
+    this.fetchAllData = this.fetchAllData.bind(this);
+    this.fetchHomeData = this.fetchHomeData.bind(this);
   }
   componentDidMount() {
-    this._fetchData(TIMELINE_URL);
+    this.fetchData(TIMELINE_URL);
   }
-  _jumpTo(id) {
+  jumpTo(id) {
     this.props.navigator.push({
       name: 'Topic page',
       component: Topic,
@@ -106,11 +105,11 @@ class Timeline extends Component {
       },
     });
   }
-  _fetchData(apiUrl) {
+  fetchData(apiUrl) {
     this.setState({ isRefreshing: true });
     return fetch(apiUrl)
       .then(rsp => rsp.json())
-      .then(data => { this._handelRsp(data); console.log(data); })
+      .then(data => { this.handleRsp(data); console.log(data); })
       .catch(
         error =>
           this.setState({
@@ -124,28 +123,29 @@ class Timeline extends Component {
         });
       });
   }
-  _fetchAllData() {
-    return this._fetchData(TIMELINE_URL);
+  fetchAllData() {
+    return this.fetchData(TIMELINE_URL);
   }
-  _fetchHomeData() {
-    return this._fetchData(HOME_URL);
+  fetchHomeData() {
+    return this.fetchData(HOME_URL);
   }
-  _handelRsp(rsp) {
+  handleRsp(rsp) {
     console.log(rsp);
     this.setState({
       data: this.state.data.cloneWithRows(rsp.data),
       cursor: true,
     });
   }
-  _renderList(tab) {
+  renderList(tab) {
     let fetcher;
     if (tab === 'all') {
-      fetcher = this._fetchAllData;
+      fetcher = this.fetchAllData;
     } else if (tab === 'home') {
-      fetcher = this._fetchHomeData;
+      fetcher = this.fetchHomeData;
     }
     return (
-      <ScrollView showsVerticalScrollIndicator={false}
+      <ScrollView
+        showsVerticalScrollIndicator={false}
         style={{ flex: 1 }}
         refreshControl={
           <RefreshControl
@@ -160,30 +160,33 @@ class Timeline extends Component {
       >
         {
           this.state.cursor &&
-              <ListView style={styles.listView}
-                dataSource={this.state.data}
-                renderRow={this._renderTopic}
-              />
-              || this._renderLoadingView()
+            <ListView
+              style={styles.listView}
+              dataSource={this.state.data}
+              renderRow={this.renderTopic}
+            />
+            || this.renderLoadingView()
         }
       </ScrollView>
     );
   }
-  _renderLoadingView() {
+  renderLoadingView() {
     return (
       <View style={styles.loadingContainer}>
         <Text style={styles.loading}>Loading ....</Text>
       </View>
     );
   }
-  _renderTopic(topic) {
+  renderTopic(topic) {
     return (
-      <TouchableHighlight onDelayColor="#dddddd"
-        onPress={() => this._jumpTo(topic.id) }
+      <TouchableHighlight
+        onDelayColor="#dddddd"
+        onPress={() => this.jumpTo(topic.id)}
       >
         <View style={styles.mainContainer}>
           <View style={styles.container}>
-            <Image style={styles.avatar}
+            <Image
+              style={styles.avatar}
               source={topic.user.avatar_url
                   && { uri: `https:${topic.user.avatar_url}` }
                   || DEFAULT_AVATAR}
@@ -203,13 +206,13 @@ class Timeline extends Component {
       </TouchableHighlight>
     );
   }
-  _renderAll() {
-    return this._renderList('all');
+  renderAll() {
+    return this.renderList('all');
   }
-  _renderHome() {
-    return this._renderList('home');
+  renderHome() {
+    return this.renderList('home');
   }
-  _renderTab() {
+  renderTab() {
     return (
       <TabBarIOS
         tintColor="blue"
@@ -225,7 +228,7 @@ class Timeline extends Component {
             });
           }}
         >
-          {this._renderHome()}
+          {this.renderHome()}
         </TabBarItemIOS>
         <TabBarItemIOS
           title="All"
@@ -237,7 +240,7 @@ class Timeline extends Component {
             });
           }}
         >
-          {this._renderAll()}
+          {this.renderAll()}
         </TabBarItemIOS>
         <TabBarItemIOS
           title="Me"
@@ -249,17 +252,17 @@ class Timeline extends Component {
             });
           }}
         >
-          {this._renderLogin()}
+          {this.renderLogin()}
         </TabBarItemIOS>
       </TabBarIOS>);
   }
-  _renderLogin() {
+  renderLogin() {
     return (
       <Login />
     );
   }
   render() {
-    return this._renderTab();
+    return this.renderTab();
   }
 }
 

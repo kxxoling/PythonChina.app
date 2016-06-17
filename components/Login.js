@@ -54,7 +54,9 @@ class Login extends Component {
           onChangeText={(password) => this.setState({ password })}
           value={this.state.password}
         />
-        <Button name="sign-in" backgroundColor="#42b983"
+        <Button
+          name="sign-in"
+          backgroundColor="#42b983"
           onPress={this.login}
         >
           <Text

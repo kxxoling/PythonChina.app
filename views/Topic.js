@@ -23,7 +23,8 @@ class Topic extends Component {
   }
   render() {
     return (
-      <ScrollView style={styles.mainContainer}
+      <ScrollView
+        style={styles.mainContainer}
         showsVerticalScrollIndicator={false}
       >
         <TopicContent topicId={this.state.topicId} />

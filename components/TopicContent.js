@@ -58,7 +58,7 @@ export default class TopicContent extends Component {
       topic: {},
       topicGot: false,
     };
-    this._share = this._share.bind(this);
+    this.share = this.share.bind(this);
   }
   componentDidMount() {
     this.fetchTopic();
@@ -71,7 +71,7 @@ export default class TopicContent extends Component {
       imageUrl: 'https://python-china.org/apple-touch-icon-120.png',
     };
   }
-  _share() {
+  share() {
     const data = this.getShareData();
     ActionSheetIOS.showShareActionSheetWithOptions(
       {
@@ -113,7 +113,8 @@ export default class TopicContent extends Component {
     return (
       <View style={styles.topicContainer}>
         <View style={styles.container}>
-          <Image source={img}
+          <Image
+            source={img}
             style={styles.avatar}
           />
           <View style={styles.rightContainer}>
@@ -130,7 +131,7 @@ export default class TopicContent extends Component {
         </View>
         <Button
           name="share-alt"
-          onPress={this._share}
+          onPress={this.share}
         >
           <Text ref="share" style={{ color: '#ddd' }}>Share</Text>
         </Button>

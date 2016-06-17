@@ -30,11 +30,11 @@ const regs = {
 class HTMLNode extends Component {
   constructor(props) {
     super(props);
-    this._onLinkPress = this._onLinkPress.bind(this);
-    this._renderNode = this._renderNode.bind(this);
+    this.onLinkPress = this.onLinkPress.bind(this);
+    this.renderNode = this.renderNode.bind(this);
   }
 
-  _onLinkPress(url) {
+  onLinkPress(url) {
     if (regs.links.link.test(url)) {
       if (regs.links.topic.test(url)) {
         const topicId = url.replace(/^https?:\/\/python-china\.org\/topic\//, '');
@@ -52,7 +52,7 @@ class HTMLNode extends Component {
     }
     return;
   }
-  _renderNode(_node, index, parent, type) {
+  renderNode(_node, index, parent, type) {
     let node = _node;
     const name = node.name;
 
