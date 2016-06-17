@@ -1,10 +1,10 @@
-import React, {
+import React, { Component } from 'react';
+import {
   StyleSheet,
   Image,
-  Component,
+  Text,
 } from 'react-native';
 
-import HtmlRender from 'react-native-html-render';
 import Dimensions from 'Dimensions';
 
 const { width, height } = (function getWidthHeight() {
@@ -78,12 +78,9 @@ class HTMLNode extends Component {
   }
   render() {
     return (
-      <HtmlRender
-        value={this.props.content}
-        stylesheet={this.props.style}
-        onLinkPress={this._onLinkPress}
-        renderNode={this._renderNode}
-      />
+      <Text>
+        HTML content here
+      </Text>
     );
   }
 }

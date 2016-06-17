@@ -1,5 +1,5 @@
-import React, {
-  Component,
+import React, { Component } from 'react';
+import {
   NavigatorIOS,
   AppRegistry,
 } from 'react-native';

@@ -1,5 +1,6 @@
 import React, {
-  Component,
+  Component } from 'react';
+import {
   StyleSheet,
   Text,
   ListView,
