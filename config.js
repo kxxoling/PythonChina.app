@@ -1,6 +1,7 @@
 const BASE_URL = 'https://python-china.org/api';
 
 export const DEFAULT_AVATAR = require('./assets/python.png');
+
 export const HOME_URL = `${BASE_URL}/topics/timeline`;
 export const TIMELINE_URL = `${HOME_URL}?show=all`;
 export const LOGIN_URL = `${BASE_URL}/session`;

@@ -32,8 +32,8 @@ export default class Comment extends Component {
 
   render() {
     const comment = this.props.comment;
-    const avatar = comment.user.avatar_url
-        && { uri: `https:${comment.user.avatar_url}` } || DEFAULT_AVATAR;
+    const avatar = (comment.user.avatar_url
+        && { uri: `https:${comment.user.avatar_url}` }) || DEFAULT_AVATAR;
     return (
       <View style={styles.container}>
         <Image style={styles.avatar} source={avatar} />

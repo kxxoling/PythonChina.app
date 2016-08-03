@@ -34,7 +34,8 @@ class Profile extends Component {
   _renderProfile() {
     return (
       <View>
-        <Image src={this.state.avatar_url}
+        <Image
+          src={this.state.avatar_url}
           style={styles.avatar}
         />
         <View>
@@ -48,14 +49,14 @@ class Profile extends Component {
       </View>
     );
   }
-  _renderTopics() {
+  fetchUserProfile() {
+  }
+  fetchUserTopics() {
+  }
+  renderTopics() {
     return (
       <ListView />
     );
-  }
-  _fetchUserProfile() {
-  }
-  _fetchUserTopics() {
   }
   render() {
     return (
@@ -64,7 +65,7 @@ class Profile extends Component {
         refreshControl={
           <RefreshControl
             refreshing={this.state.isRefreshing}
-            onRefresh={this._fetchUserProfile}
+            onRefresh={this.fetchUserProfile}
             tintColor="#ff0000"
             title="Loading..."
             colors={['#ff0000', '#00ff00', '#0000ff']}
@@ -72,8 +73,8 @@ class Profile extends Component {
           />
         }
       >
-        {this._renderProfile()}
-        {this._renderTopics()}
+        {this.renderProfile()}
+        {this.renderTopics()}
       </ScrollView>
     );
   }

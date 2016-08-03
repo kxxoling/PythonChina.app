@@ -5,7 +5,7 @@ import {
   Text,
 } from 'react-native';
 
-import Dimensions from 'Dimensions';
+import Dimensions from 'dimensions';
 
 const { width, height } = (function getWidthHeight() {
   return Dimensions.get('window');

@@ -22,7 +22,8 @@ class Router extends Component {
   render() {
     return (
       <Provider store={store}>
-        <NavigatorIOS style={{ flex: 1 }}
+        <NavigatorIOS
+          style={{ flex: 1 }}
           initialRoute={{ title: 'Python China', component: Timeline }}
         />
       </Provider>

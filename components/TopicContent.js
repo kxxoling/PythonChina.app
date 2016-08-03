@@ -108,7 +108,8 @@ export default class TopicContent extends Component {
     }
     const topic = this.state.topic;
     const user = topic.user;
-    const img = user.avatar_url && { uri: `https:${user.avatar_url}` } || DEFAULT_AVATAR;
+    const img = (user.avatar_url && { uri: `https:${user.avatar_url}` })
+        || DEFAULT_AVATAR;
 
     return (
       <View style={styles.topicContainer}>
@@ -133,7 +134,10 @@ export default class TopicContent extends Component {
           name="share-alt"
           onPress={this.share}
         >
-          <Text ref="share" style={{ color: '#ddd' }}>Share</Text>
+          <Text
+            ref="share"  // eslint-disable-line react/no-string-refs
+            style={{ color: '#ddd' }}
+          >Share</Text>
         </Button>
       </View>
     );

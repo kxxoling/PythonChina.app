@@ -159,12 +159,12 @@ class Timeline extends Component {
         }
       >
         {
-          this.state.cursor &&
+          (this.state.cursor &&
             <ListView
               style={styles.listView}
               dataSource={this.state.data}
               renderRow={this.renderTopic}
-            />
+            />)
             || this.renderLoadingView()
         }
       </ScrollView>
@@ -178,6 +178,7 @@ class Timeline extends Component {
     );
   }
   renderTopic(topic) {
+    /* eslint-disable */
     return (
       <TouchableHighlight
         onDelayColor="#dddddd"
@@ -205,6 +206,7 @@ class Timeline extends Component {
         </View>
       </TouchableHighlight>
     );
+    /* eslint-enable */
   }
   renderAll() {
     return this.renderList('all');
