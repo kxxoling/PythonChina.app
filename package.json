@@ -5,7 +5,8 @@
   "scripts": {
     "lint": "node node_modules/eslint/bin/eslint.js .",
     "fix": "node node_modules/eslint/bin/eslint.js . --fix",
-    "start": "node node_modules/react-native/local-cli/cli.js start"
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "upgrade": "react-native upgrade && rnpm link"
   },
   "dependencies": {
     "dimensions": "^0.1.0",
